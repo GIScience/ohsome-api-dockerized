@@ -6,6 +6,8 @@ on:
       - '*.*.*'
   schedule:
     - cron: '0 0 * * 0'
+  pull_request:
+    branches: [ main ]
 
 jobs:
   lint:
@@ -61,10 +63,10 @@ jobs:
           TAGS_LATEST="--tag ${DOCKER_IMAGE}:latest"
 
           if [ $CURRENT_VERSIONS == *"$DOCKER_VERSION"* ]; then
-            echo "Version present or latest. Skipping it!"
+            echo "Version: $DOCKER_VERSION present or latest. Skipping it!"
             BUILD_VERSION=false
           else
-            echo "Version not present and not latest. Building it!"
+            echo "Version $DOCKER_VERSION not present and not latest. Building it!"
             BUILD_VERSION=true
           fi
 
