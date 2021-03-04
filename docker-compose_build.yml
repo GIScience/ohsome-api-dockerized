@@ -1,0 +1,22 @@
+# docker-compose build
+version: '2.1'
+networks:
+  ohsome:
+    name: ohsome
+
+services:
+  ohsome-api:
+    image: julianpsotta/ohsome-api:latest
+    build:
+      context: ./
+      args:
+        OHSOMEAPI_VERSION: "latest"
+        FALLBACK_DATA_FILE: "fallback.oshdb.mv.db"
+    container_name: ohsome-api
+    ports:
+      - 8080:8080
+    restart: always
+    networks:
+      - ohsome
+#    volumes:
+#      - .:/app
