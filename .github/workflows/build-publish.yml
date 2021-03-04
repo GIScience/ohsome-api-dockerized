@@ -58,7 +58,7 @@ jobs:
           TAGS_VERSION="--tag ${DOCKER_IMAGE}:${DOCKER_VERSION}"
           TAGS_LATEST="--tag ${DOCKER_IMAGE}:latest"
 
-          if [ $CURRENT_VERSIONS == *"$DOCKER_VERSION"* ] || [ "latest" != *"$DOCKER_VERSION"* ]; then
+          if [ $CURRENT_VERSIONS == *"$DOCKER_VERSION"* ] || [ "latest" == *"$DOCKER_VERSION"* ]; then
             echo "Version present or latest. Skipping it!"
             BUILD_VERSION=false
           else
