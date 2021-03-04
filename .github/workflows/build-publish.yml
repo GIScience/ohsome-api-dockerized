@@ -42,11 +42,11 @@ jobs:
       - name: Prepare
         id: prepare
         run: |
-          curl -o fallback.oshdb.mv.db http://downloads.ohsome.org/v0.6/europe/germany/baden-wuerttemberg/heidelberg_68900_2020-07-23.oshdb.mv.db
+          curl -o /tmp/fallback.oshdb.mv.db http://downloads.ohsome.org/v0.6/europe/germany/baden-wuerttemberg/heidelberg_68900_2020-07-23.oshdb.mv.db
 
           DOCKER_IMAGE=julianpsotta/ohsome-api
           DOCKER_VERSION=latest
-          FALLBACK_DATA_FILE=fallback.oshdb.mv.db
+          FALLBACK_DATA_FILE=/tmp/fallback.oshdb.mv.db
 
           echo ::set-output name=docker_image::${DOCKER_IMAGE}
           echo ::set-output name=docker_version::${DOCKER_VERSION}
