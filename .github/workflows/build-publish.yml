@@ -6,8 +6,7 @@ on:
       - '*.*.*'
   schedule:
     - cron: '0 0 * * 0'
-  pull_request:
-    branches: [ "**" ]
+
 jobs:
   lint:
     runs-on: ubuntu-20.04
