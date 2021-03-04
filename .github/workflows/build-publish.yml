@@ -39,6 +39,11 @@ jobs:
         id: buildx
         with:
           install: true
+      - name: 'Get Previous tag'
+        id: previoustag
+        uses: "WyriHaximus/github-action-get-previous-tag@v1"
+        env:
+          GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
       - name: Prepare
         id: prepare
         run: |
@@ -52,7 +57,7 @@ jobs:
 
           DOCKER_IMAGE=julianpsotta/ohsome-api
           CURRENT_VERSIONS=$(test_version)
-          DOCKER_VERSION=${GITHUB_REF/refs\/tags\//}
+          DOCKER_VERSION=${steps.previoustag.outputs.mayor}
           DOCKER_PLATFORMS=linux/amd64
 
           TAGS_VERSION="--tag ${DOCKER_IMAGE}:${DOCKER_VERSION}"
