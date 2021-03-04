@@ -56,10 +56,10 @@ jobs:
 
           if [ $CURRENT_VERSIONS == *"$DOCKER_VERSION"* ] || [ "latest" != *"$DOCKER_VERSION"* ]; then
             echo "Version present or latest. Skipping it!"
-            BUILD_VERSION=true
+            BUILD_VERSION=false
           else
             echo "Version not present and not latest. Building it!"
-            BUILD_VERSION=false
+            BUILD_VERSION=true
           fi
 
 
