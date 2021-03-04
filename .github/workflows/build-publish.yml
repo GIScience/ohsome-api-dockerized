@@ -79,8 +79,10 @@ jobs:
         if: ${{ steps.prepare.outputs.build_version == 'true' }}
         run: |
           docker build -t julianpsotta/ohsome-api:${{ steps.prepare.outputs.docker_version }} --build-arg OHSOMEAPI_VERSION=${{ steps.prepare.outputs.docker_version }} --build-arg FALLBACK_DATA_FILE=fallback.oshdb.mv.db .
+          docker tag ohsome-api:${{ steps.prepare.outputs.docker_version }} julianpsotta/ohsome-api:${{ steps.prepare.outputs.docker_version }}
           docker push julianpsotta/ohsome-api:${{ steps.prepare.outputs.docker_version }}
       - name: Build and publish latest
         run: |
           docker build -t julianpsotta/ohsome-api:latest --build-arg OHSOMEAPI_VERSION=latest --build-arg FALLBACK_DATA_FILE=fallback.oshdb.mv.db .
+          docker tag ohsome-api:latest julianpsotta/ohsome-api:latest
           docker push julianpsotta/ohsome-api:latest
