@@ -7,6 +7,9 @@ on:
       - 'v*.*.*'
   schedule:
     - cron: '0 0 * * 0'
+  pull_request:
+    branches: [ "**" ]
+
 jobs:
   lint:
     runs-on: ubuntu-20.04
@@ -49,7 +52,7 @@ jobs:
 
           DOCKER_IMAGE=julianpsotta/ohsome-api
           CURRENT_VERSIONS=$(test_version)
-          DOCKER_VERSION=${GITHUB_REF#refs/*/}
+          DOCKER_VERSION=${GITHUB_REF/refs\/tags\//}
           DOCKER_PLATFORMS=linux/amd64
 
           TAGS_VERSION="--tag ${DOCKER_IMAGE}:${DOCKER_VERSION}"
