@@ -1,4 +1,4 @@
-name: Publish Docker image
+name: Publish Docker image with version
 on:
   # Triggers the workflow on push or pull request events but only for the main branch
   push:
@@ -34,7 +34,6 @@ jobs:
           # list of Docker images to use as base name for tags
           images: |
             julianpsotta/ohsome-api
-      #            ${{ github.repository }}/ohsome-api
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v1
       - name: Set up Docker Buildx
@@ -45,18 +44,43 @@ jobs:
       - name: Prepare
         id: prepare
         run: |
+          function test_version() {
+            curl -s -S "https://registry.hub.docker.com/v2/repositories/julianpsotta/ohsome-api/tags/?page_size=1024" |
+              sed -e 's/,/,\n/g' -e 's/\[/\[\n/g' |
+              grep '"name"' |
+              awk -F\" '{print $4;}' |
+              sort -fu
+          }
+          CURRENT_VERSIONS=$(test_version)
+          DOCKER_VERSION=${GITHUB_REF#refs/*/}
+
+          if [ $CURRENT_VERSIONS == *"$DOCKER_VERSION"* ] || [ "latest" != *"$DOCKER_VERSION"* ]; then
+            echo "Version present or latest. Skipping it!"
+            BUILD_VERSION=False
+          else
+            echo "Version not present and not latest. Building it!"
+            BUILD_VERSION=True
+          fi
+
+
           DOCKER_IMAGE=julianpsotta/ohsome-api
-          DOCKER_VERSION=latest
           echo ::set-output name=docker_image::${DOCKER_IMAGE}
           echo ::set-output name=docker_version::${DOCKER_VERSION}
+          echo ::set-output name=build_version::${BUILD_VERSION}
+
+          curl -o fallback.oshdb.mv.db http://downloads.ohsome.org/v0.6/europe/germany/baden-wuerttemberg/heidelberg_68900_2020-07-23.oshdb.mv.db
 
       - name: Login to DockerHub
-        #        if: github.event_name != 'pull_request'
         uses: docker/login-action@v1
         with:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_TOKEN }}
-      - name: Build
+      - name: Build and publish version if not present
+        if: ${{ steps.prepare.outputs.build_version == "True" }}
         run: |
-          curl -o fallback.oshdb.mv.db http://downloads.ohsome.org/v0.6/europe/germany/baden-wuerttemberg/heidelberg_68900_2020-07-23.oshdb.mv.db
           docker build -t julianpsotta/ohsome-api:${{ steps.prepare.outputs.docker_version }} --build-arg OHSOMEAPI_VERSION=${{ steps.prepare.outputs.docker_version }} --build-arg FALLBACK_DATA_FILE=fallback.oshdb.mv.db .
+          docker push julianpsotta/ohsome-api:${{ steps.prepare.outputs.docker_version }}
+      - name: Build and publish latest
+        run: |
+          docker build -t julianpsotta/ohsome-api:latest --build-arg OHSOMEAPI_VERSION=latest --build-arg FALLBACK_DATA_FILE=fallback.oshdb.mv.db .
+          docker push julianpsotta/ohsome-api:latest
