@@ -56,10 +56,10 @@ jobs:
 
           if [ $CURRENT_VERSIONS == *"$DOCKER_VERSION"* ] || [ "latest" != *"$DOCKER_VERSION"* ]; then
             echo "Version present or latest. Skipping it!"
-            BUILD_VERSION=False
+            BUILD_VERSION=true
           else
             echo "Version not present and not latest. Building it!"
-            BUILD_VERSION=True
+            BUILD_VERSION=false
           fi
 
 
@@ -76,7 +76,7 @@ jobs:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_TOKEN }}
       - name: Build and publish version if not present
-        if: ${{ steps.prepare.outputs.build_version == "True" }}
+        if: ${{ steps.prepare.outputs.build_version == 'true' }}
         run: |
           docker build -t julianpsotta/ohsome-api:${{ steps.prepare.outputs.docker_version }} --build-arg OHSOMEAPI_VERSION=${{ steps.prepare.outputs.docker_version }} --build-arg FALLBACK_DATA_FILE=fallback.oshdb.mv.db .
           docker push julianpsotta/ohsome-api:${{ steps.prepare.outputs.docker_version }}
