@@ -86,10 +86,9 @@ jobs:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_TOKEN }}
       - name: Publish version if not present
-        if: ${{ steps.prepare.outputs.build_version == 'true' }} && success()
+        if: ${{ steps.prepare.outputs.build_version == 'true' }}
         run: |
           docker buildx build --output "type=image,push=true" ${{ steps.prepare.outputs.buildx_args_version }}
       - name: Publish latest
-        if: success()
         run: |
           docker buildx build --output "type=image,push=true" ${{ steps.prepare.outputs.buildx_args_latest }}
