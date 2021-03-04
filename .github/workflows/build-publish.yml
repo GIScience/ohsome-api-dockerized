@@ -45,7 +45,7 @@ jobs:
               sort -fu
           }
 
-          DOCKER_IMAGE=julianpsotta/ohsome-apiQ
+          DOCKER_IMAGE=julianpsotta/ohsome-api
           CURRENT_VERSIONS=$(test_version)
           DOCKER_VERSION=${GITHUB_REF#refs/*/}
           DOCKER_PLATFORMS=linux/amd64
