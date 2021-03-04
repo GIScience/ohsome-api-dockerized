@@ -46,8 +46,9 @@ jobs:
         id: prepare
         run: |
           DOCKER_IMAGE=julianpsotta/ohsome-api
+          DOCKER_VERSION=latest
           echo ::set-output name=docker_image::${DOCKER_IMAGE}
-          echo ::set-output name=docker_version::latest
+          echo ::set-output name=docker_version::${DOCKER_VERSION}
 
       - name: Login to DockerHub
         #        if: github.event_name != 'pull_request'
