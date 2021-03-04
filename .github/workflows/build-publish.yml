@@ -25,9 +25,6 @@ jobs:
     name: Push Docker image to docker hub and github packages
     runs-on: ubuntu-latest
     steps:
-      - name: Download fallback file
-        run: |
-          curl -o fallback.oshdb.mv.db http://downloads.ohsome.org/v0.6/europe/germany/baden-wuerttemberg/heidelberg_68900_2020-07-23.oshdb.mv.db
       - name: Checkout
         uses: actions/checkout@v2
       - name: Docker meta
@@ -45,10 +42,15 @@ jobs:
       - name: Prepare
         id: prepare
         run: |
+          curl -o fallback.oshdb.mv.db http://downloads.ohsome.org/v0.6/europe/germany/baden-wuerttemberg/heidelberg_68900_2020-07-23.oshdb.mv.db
+
           DOCKER_IMAGE=julianpsotta/ohsome-api
           DOCKER_VERSION=latest
+          FALLBACK_DATA_FILE=fallback.oshdb.mv.db
+
           echo ::set-output name=docker_image::${DOCKER_IMAGE}
           echo ::set-output name=docker_version::${DOCKER_VERSION}
+          echo ::set-output name=fallback_data_file::${FALLBACK_DATA_FILE}
 
       - name: Login to DockerHub
         #        if: github.event_name != 'pull_request'
@@ -72,5 +74,5 @@ jobs:
           tags: ${{ steps.prepare.outputs.docker_image }}:${{ steps.prepare.outputs.docker_version }}
           labels: ${{ steps.docker_meta.outputs.labels }}
           build-args: |
-            FALLBACK_DATA_FILE=./fallback.oshdb.mv.db
+            FALLBACK_DATA_FILE=${{ steps.prepare.outputs.fallback_data_file }}
             OHSOMEAPI_VERSION=latest
