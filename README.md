@@ -35,7 +35,6 @@ valid `*.oshdb.mv.db` file from [http://downloads.ohsome.org](http://downloads.o
 the container as described below.
 You can leave that folder empty to use the build in fallback database, covering
 only [Heidelberg](http://downloads.ohsome.org/v0.6/europe/germany/baden-wuerttemberg/).
----
 
 #### EXAMPLE: Simplest and quickest docker run with a fallback database build in
 
