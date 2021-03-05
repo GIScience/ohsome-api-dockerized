@@ -18,5 +18,3 @@ services:
     restart: always
     networks:
       - ohsome
-#    volumes:
-#      - .:/app

@@ -1,28 +1,31 @@
 #!/bin/sh
 
 # Change directory to the app directory where the jar file is located
-cd /opt/app || exit
+cd /opt || exit
 
-# Create the data folder if its not mounted to avoid script access errors
-[ -d data ] || mkdir data
+if ! [ -d "./app" ] && [ -f "./app.tar.xz" ]; then
+  echo "===================================================="
+  echo "App folder still compressed. Decompressing it first."
+  echo "===================================================="
+  pv app.tar.xz | tar -xvf - -J
+  rm -rf app.tar.xz
+elif ! [ -d "./app" ] && ! [ -f "./app.tar.xz" ]; then
+  echo "=================================================================================="
+  echo "No app folder and not compressed app folder found. This shouldn't happen. Exiting."
+  echo "=================================================================================="
+  exit
+fi
 
 if [ -f "./data/${DATA_FILE}" ]; then
   echo "=================================================================="
   echo "Custom database found. Using it instead of the fallback database."
   echo "=================================================================="
-  java -jar target/ohsome-api.jar --database.db="./data/${DATA_FILE}"
-elif [ -e "fallback_database.oshdb.mv.db" ]; then
+  java -jar app/ohsome-api.jar --database.db="./data/${DATA_FILE}"
+elif [ -e "./app/fallback.oshdb.mv.db" ]; then
   echo "============================================================"
   echo "No custom database found. Falling back to fallback database."
   echo "============================================================"
-  java -jar target/ohsome-api.jar --database.db=./fallback_database.oshdb.mv.db
-elif [ -e "fallback_database.tar.gz" ]; then
-  echo "========================================================================================"
-  echo "No custom database found. Fallback database found but it needs to be uncompressed first."
-  tar -xvf fallback_database.tar.gz
-  echo "Uncompressing successful. Starting the server with the fallback database."
-  echo "========================================================================================"
-  java -jar target/ohsome-api.jar --database.db=./fallback_database.oshdb.mv.db
+  java -jar app/ohsome-api.jar --database.db=./app/fallback.oshdb.mv.db
 else
   echo "========================================================================"
   echo "No custom database found and no fallback database initialized. Quitting."
