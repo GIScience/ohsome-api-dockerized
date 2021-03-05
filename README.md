@@ -1,9 +1,8 @@
 # ohsome-api-dockerized
 
 Dockerized Version of the ohsome-api. The current code of the `ohsome-api` can be found
-at: [https://github.com/GIScience/ohsome-api](https://github.com/GIScience/ohsome-api).
-To see all available docker images
-visit: [julianpsotta/ohsome-api](https://hub.docker.com/repository/docker/julianpsotta/ohsome-api)
+at: [https://github.com/GIScience/ohsome-api](https://github.com/GIScience/ohsome-api). To see all available docker
+images visit: [julianpsotta/ohsome-api](https://hub.docker.com/repository/docker/julianpsotta/ohsome-api)
 <!-- TOC -->
 
 - [requirements](#requirements)
@@ -32,9 +31,8 @@ Either use pre-build docker images or build the images yourself.
 
 If you wish to load a local database instead of using the fallback database (Heidelberg), you have to provide a
 valid `*.oshdb.mv.db` file from [http://downloads.ohsome.org](http://downloads.ohsome.org) and load it as a volume into
-the container as described below.
-You can leave that folder empty to use the build in fallback database, covering
-only [Heidelberg](http://downloads.ohsome.org/v0.6/europe/germany/baden-wuerttemberg/).
+the container as described below. You can leave that folder empty to use the build in fallback database,
+covering [Heidelberg](http://downloads.ohsome.org/v0.6/europe/germany/baden-wuerttemberg/).
 
 #### EXAMPLE: Simplest and quickest docker run with a fallback database build in
 
@@ -47,20 +45,18 @@ curl -X POST "http://localhost:8080/contributions/latest/geometry?bboxes=8.67%2C
 
 ```
 
-
-
 ---
 
 #### EXAMPLE: Docker run by using a custom database
 
 Pre-build docker images with a local database named `heidelberg_68900_2020-07-23.oshdb.mv.db` which should be copied
-to `./data` for this example.
-If the download fails, or you need a different database checkout: http://downloads.ohsome.org
+to `./data` for this example. If the download fails, or you need a different database
+checkout: http://downloads.ohsome.org
 
 ```shell
 curl -O http://downloads.ohsome.org/v0.6/europe/germany/baden-wuerttemberg/heidelberg_68900_2020-07-23.oshdb.mv.db
 mkdir ./data && mv heidelberg_68900_2020-07-23.oshdb.mv.db ./data
-docker run -t -i --name ohsome-api -p 8080:8080 -v "$(pwd)/data:/opt/app/data" --env DATA_FILE="heidelberg_68900_2020-07-23.oshdb.mv.db" julianpsotta/ohsome-api:1.3.2
+docker run -t -i --name ohsome-api -p 8080:8080 -v "$(pwd)/data:/opt/data" --env DATA_FILE="heidelberg_68900_2020-07-23.oshdb.mv.db" julianpsotta/ohsome-api:1.3.2
 # To see what happens inside the container run
 docker logs -ft ohsome-api
 # Try the api with an actual request
@@ -72,6 +68,7 @@ curl -X POST "http://localhost:8080/contributions/latest/geometry?bboxes=8.67%2C
 #### EXAMPLE: docker-compose run by using a custom database
 
 Use the provided `docker-compose.yml` or create one with a similar content:
+
 ```text
 version: '2.1'
 networks:
@@ -85,7 +82,7 @@ services:
     environment:
       DATA_FILE: "your-database.oshdb.mv.db"
     volumes:
-      - ./data:/opt/app/data
+      - ./data:/opt/data
     ports:
       - 8080:8080
     restart: always
@@ -107,25 +104,11 @@ curl -X POST "http://localhost:8080/contributions/latest/geometry?bboxes=8.67%2C
 Open the `docker-compose.yml` file in order to change details e.g. the Version you want to use.
 
 ### Build images
-
-#### Download a fallback database (optional)
-
-The fallback database is used for scenarios where no database is provided when the image is used to start a
-container.
-This database will be incorporated into the image itself thus increasing its size.
-This is especially handy if you need a quick container to use in e.g. github workflows to test against a local api.
-Consider a small data set like heidelberg:
-
-```shell
-curl -o fallback.oshdb.mv.db http://downloads.ohsome.org/v0.6/europe/germany/baden-wuerttemberg/heidelberg_68900_2020-07-23.oshdb.mv.db
-```
-
----
-
+The Dockerfile is always build with Heidelberg as a fallback database. The data itself is highly compressed and is not adding much on the overall image size.
 #### EXAMPLE: Build the latest version with docker
 
 ```shell
-docker build -t julianpsotta/ohsome-api:latest --build-arg OHSOMEAPI_VERSION=latest --build-arg FALLBACK_DATA_FILE=fallback.oshdb.mv.db .
+docker build -t julianpsotta/ohsome-api:latest --build-arg OHSOMEAPI_VERSION=latest .
 ```
 
 ---
