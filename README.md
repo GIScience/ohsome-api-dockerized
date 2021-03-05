@@ -63,6 +63,28 @@ docker logs -ft ohsome-api
 
 #### EXAMPLE: docker-compose run by using a custom database
 
+Use the provided `docker-compose.yml` or create one with a similar content:
+```text
+version: '2.1'
+networks:
+  ohsome:
+    name: ohsome
+
+services:
+  ohsome-api:
+    image: julianpsotta/ohsome-api:1.3.2
+    container_name: ohsome-api
+    environment:
+      DATA_FILE: "your-database.oshdb.mv.db"
+    volumes:
+      - ./data:/opt/app/data
+    ports:
+      - 8080:8080
+    restart: always
+    networks:
+      - ohsome
+```
+
 ```shell
 # docker-compose with pre-build images
 curl -O http://downloads.ohsome.org/v0.6/europe/germany/baden-wuerttemberg/heidelberg_68900_2020-07-23.oshdb.mv.db
