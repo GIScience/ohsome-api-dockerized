@@ -11,11 +11,9 @@ services:
     environment:
       DATA_FILE: "heidelberg_68900_2020-07-23.oshdb.mv.db"
     volumes:
-      - ./data:/opt/app/data
+      - ./data:/opt/data
     ports:
       - 8080:8080
     restart: always
     networks:
       - ohsome
-#    volumes:
-#      - .:/app

@@ -11,12 +11,9 @@ services:
       context: ./
       args:
         OHSOMEAPI_VERSION: "latest"
-        FALLBACK_DATA_FILE: "fallback.oshdb.mv.db"
     container_name: ohsome-api
     ports:
       - 8080:8080
     restart: always
     networks:
       - ohsome
-#    volumes:
-#      - .:/app

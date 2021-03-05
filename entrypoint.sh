@@ -1,23 +1,35 @@
-#!/usr/bin/env bash
-
-RED='\033[0;31m'
-GREEN='\033[0;32m'
-NC='\033[0m'
+#!/bin/sh
 
 # Change directory to the app directory where the jar file is located
-cd /opt/app || exit
+cd /opt || exit
 
-# Create the data folder if its not mounted to avoid script access errors
-[ -d data ] || mkdir data
+if ! [ -d "./app" ] && [ -f "./app.tar.xz" ]; then
+  echo "===================================================="
+  echo "App folder still compressed. Decompressing it first."
+  echo "===================================================="
+  pv app.tar.xz | tar -xvf - -J
+  rm -rf app.tar.xz
+elif ! [ -d "./app" ] && ! [ -f "./app.tar.xz" ]; then
+  echo "=================================================================================="
+  echo "No app folder and not compressed app folder found. This shouldn't happen. Exiting."
+  echo "=================================================================================="
+  exit
+fi
 
 if [ -f "./data/${DATA_FILE}" ]; then
-  echo "${GREEN}Custom database found.${NC} Using it instead of the fallback database."
-  java -jar target/ohsome-api.jar --database.db="./data/${DATA_FILE}"
-elif [ -e "fallback_database.oshdb.mv.db" ]; then
-  echo "${RED}No custom database found.${NC} Falling back to fallback database."
-  java -jar target/ohsome-api.jar --database.db=./fallback_database.oshdb.mv.db
+  echo "=================================================================="
+  echo "Custom database found. Using it instead of the fallback database."
+  echo "=================================================================="
+  java -jar app/ohsome-api.jar --database.db="./data/${DATA_FILE}"
+elif [ -e "./app/fallback.oshdb.mv.db" ]; then
+  echo "============================================================"
+  echo "No custom database found. Falling back to fallback database."
+  echo "============================================================"
+  java -jar app/ohsome-api.jar --database.db=./app/fallback.oshdb.mv.db
 else
-  echo "${RED}No custom database found and no fallback database initialized. Quitting.${NC}"
+  echo "========================================================================"
+  echo "No custom database found and no fallback database initialized. Quitting."
+  echo "========================================================================"
   exit 1
 fi
 
