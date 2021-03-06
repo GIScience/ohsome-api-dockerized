@@ -7,7 +7,7 @@ if ! [ -d "./app" ] && [ -f "./app.tar.xz" ]; then
   echo "===================================================="
   echo "App folder still compressed. Decompressing it first."
   echo "===================================================="
-  pv app.tar.xz | tar -xvf - -J
+  tar -xvf app.tar.xz
   rm -rf app.tar.xz
 elif ! [ -d "./app" ] && ! [ -f "./app.tar.xz" ]; then
   echo "=================================================================================="
