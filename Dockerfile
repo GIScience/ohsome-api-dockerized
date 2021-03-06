@@ -17,12 +17,8 @@ RUN if [ -z $OHSOMEAPI_VERSION ] || [ "$OHSOMEAPI_VERSION" = "latest" ] ; then e
 # Make it executable
 RUN mvn -DskipTests=true package
 
-# 2. Production stage
-FROM adoptopenjdk/openjdk11:jre-11.0.10_9-alpine as production-stage
-
-# Set author and maintainer information for proper contact details
-LABEL author="Julian Psotta <julianpsotta@gmail.com>"
-LABEL maintainer="Julian Psotta <julianpsotta@gmail.com>"
+# 2. Preparation stage
+FROM adoptopenjdk/openjdk11:jre-11.0.10_9-alpine as preparation-stage
 
 WORKDIR /opt/
 
@@ -30,7 +26,7 @@ WORKDIR /opt/
 COPY --from=build-stage /opt/app/target/*.jar /opt/app/target/
 
 # Copy the fallback data and entrypoint
-ADD entrypoint.sh /opt/
+COPY entrypoint.sh /opt/
 
 # Bootstrap the app os and compress the folder afterwards to reduce the image size.
 RUN echo Prepare the app folder. \
@@ -53,6 +49,18 @@ RUN echo Prepare the app folder. \
     && echo Clean the build environment from unneeded files. \
     && rm -rf app/ fallback.tar.xz \
     && echo Done!
+
+# 3. Production stage
+FROM adoptopenjdk/openjdk11:jre-11.0.10_9-alpine as production-stage
+
+WORKDIR /opt/
+
+# Set author and maintainer information for proper contact details
+LABEL author="Julian Psotta <julianpsotta@gmail.com>"
+LABEL maintainer="Julian Psotta <julianpsotta@gmail.com>"
+
+# Copy only needed target files
+COPY --from=preparation-stage /opt/ /opt/
 
 # Entrypoint run
 CMD ["./entrypoint.sh"]
