@@ -38,7 +38,7 @@ covering [Heidelberg](http://downloads.ohsome.org/v0.6/europe/germany/baden-wuer
 
 ```shell
 # docker image with pre-build images using a fallback database of heidelberg http://downloads.ohsome.org/v0.6/europe/germany/baden-wuerttemberg/
-docker run -t -i --name ohsome-api -p 8080:8080 --env julianpsotta/ohsome-api:latest
+docker run -t -i --name ohsome-api -p 8080:8080 julianpsotta/ohsome-api:latest
 
 # Try the api with an actual request
 curl -X POST "http://localhost:8080/contributions/latest/geometry?bboxes=8.67%2C49.39%2C8.71%2C49.42&clipGeometry=true&filter=type%3Away%20and%20natural%3D*&properties=tags&time=2016-01-01%2C2017-01-01" -H "accept: application/json"
