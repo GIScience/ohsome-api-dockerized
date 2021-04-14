@@ -104,7 +104,10 @@ curl -X POST "http://localhost:8080/contributions/latest/geometry?bboxes=8.67%2C
 Open the `docker-compose.yml` file in order to change details e.g. the Version you want to use.
 
 ### Build images
-The Dockerfile is always build with Heidelberg as a fallback database. The data itself is highly compressed and is not adding much on the overall image size.
+
+The Dockerfile is always build with Heidelberg as a fallback database. The data itself is highly compressed and is not
+adding much on the overall image size.
+
 #### EXAMPLE: Build the latest version with docker
 
 ```shell
@@ -120,3 +123,14 @@ docker-compose -f docker-compose_build.yml build
 ```
 
 Open the `docker-compose_build.yml` in order to change details e.g. the Version you want to build.
+
+# Authors
+
+* **Julian Psotta** - *Author | Initial work* - [MichaelsJP](https://github.com/MichaelsJP)
+
+See also the list of [contributors](https://github.com/GIScience/ohsome-api-dockerized/contributors) who participated in
+this project.
+
+# License
+
+GNU AFFERO GENERAL PUBLIC LICENSE Version 3, 19 November 2007
