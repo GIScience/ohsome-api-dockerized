@@ -5,17 +5,16 @@ at: [https://github.com/GIScience/ohsome-api](https://github.com/GIScience/ohsom
 images visit: [julianpsotta/ohsome-api](https://hub.docker.com/repository/docker/julianpsotta/ohsome-api)
 <!-- TOC -->
 
+# Table of contents
+
+- [ohsome-api-dockerized](#ohsome-api-dockerized)
 - [requirements](#requirements)
 - [Usage](#usage)
-    + [Run pre-build images](#run-pre-build-images)
-        - [EXAMPLE: Simplest and quickest docker run with a fallback database build in](#example--simplest-and-quickest-docker-run-with-a-fallback-database-build-in)
-        - [EXAMPLE: Docker run by using a custom database](#example--docker-run-by-using-a-custom-database)
-        - [EXAMPLE: docker-compose run by using a custom database](#example--docker-compose-run-by-using-a-custom-database)
-    + [Build images](#build-images)
-        - [Download a fallback database (optional)](#download-a-fallback-database--optional-)
-        - [EXAMPLE: Build the latest version with docker](#example--build-the-latest-version-with-docker)
-        - [EXAMPLE: Build with docker-compose using version 1.3.2](#example--build-with-docker-compose-using-version-132)
-
+    - [Run pre-build images](#run-pre-build-images)
+    - [Build images](#build-images)
+- [Contribute](#contribute)
+- [Authors](#authors)
+- [License](#license)
 <!-- /TOC -->
 
 # requirements
