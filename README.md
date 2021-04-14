@@ -124,6 +124,22 @@ docker-compose -f docker-compose_build.yml build
 
 Open the `docker-compose_build.yml` in order to change details e.g. the Version you want to build.
 
+# Contribute
+
+This repository uses pre-commit hooks to make sure all commits meet equal standars. To contribute install `pre-commit`
+first and in the root location of the repository run:
+
+```shell
+pre-commit clean
+pre-commit install
+```
+
+For every submission git will automatically check the installed hooks. To manually execute them, run:
+
+```shell
+pre-commit run --all-files
+```
+
 # Authors
 
 * **Julian Psotta** - *Author | Initial work* - [MichaelsJP](https://github.com/MichaelsJP)
