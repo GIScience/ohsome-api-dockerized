@@ -8,13 +8,16 @@ ARG OHSOMEAPI_VERSION
 WORKDIR /opt/app/
 
 # System deps and get the ohsome-api repository data:
-RUN apk add git bash maven curl && git clone https://github.com/GIScience/ohsome-api.git ./ && git fetch --all --tags
+RUN apk add git bash maven && git clone https://github.com/GIScience/ohsome-api.git ./ && git fetch --all --tags
+
+COPY fallback_data/fallback.tar.xz /opt/app/
 
 # Checkout version if provided
 RUN if [ -z $OHSOMEAPI_VERSION ] || [ "$OHSOMEAPI_VERSION" = "latest" ] ; then echo Version not provided. Sticking to latest version.; else echo Version provided. Checkout $OHSOMEAPI_VERSION \
     && git checkout --quiet tags/$OHSOMEAPI_VERSION ; fi \
-    && echo Download the fallback and test data \
-    && curl -L https://github.com/GIScience/ohsome-api-dockerized/raw/main/fallback_data/fallback.tar.xz | tar -xJ
+    && echo Extract the test data. \
+    && tar -xf fallback.tar.xz \
+    && rm -rf fallback.tar.xz
 
 RUN echo Run the integration tests \
     && mvn -Dport_get=8081 -Dport_post=8082 -Dport_data=8083 -Dport_xyz=8084 -DdbFilePathProperty="--database.db=./fallback.oshdb.mv.db" test
