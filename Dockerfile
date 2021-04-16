@@ -14,10 +14,7 @@ RUN apk add git bash maven curl && git clone https://github.com/GIScience/ohsome
 RUN if [ -z $OHSOMEAPI_VERSION ] || [ "$OHSOMEAPI_VERSION" = "latest" ] ; then echo Version not provided. Sticking to latest version.; else echo Version provided. Checkout $OHSOMEAPI_VERSION \
     && git checkout --quiet tags/$OHSOMEAPI_VERSION ; fi \
     && echo Download the fallback and test data \
-    && curl -LJO https://github.com/GIScience/ohsome-api-dockerized/raw/main/fallback_data/fallback.tar.xz \
-    && echo Extract the data. \
-    && tar -xf fallback.tar.xz \
-    && rm -rf fallback.tar.xz
+    && curl -L https://github.com/GIScience/ohsome-api-dockerized/raw/main/fallback_data/fallback.tar.xz | tar -xJ
 
 RUN echo Run the integration tests \
     && mvn -Dport_get=8081 -Dport_post=8082 -Dport_data=8083 -Dport_xyz=8084 -DdbFilePathProperty="--database.db=./fallback.oshdb.mv.db" test
