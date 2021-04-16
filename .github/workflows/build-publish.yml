@@ -68,16 +68,12 @@ jobs:
             BUILD_VERSION=true
           fi
 
-          curl -o fallback.oshdb.mv.db http://downloads.ohsome.org/v0.6/europe/germany/baden-wuerttemberg/heidelberg_68900_2020-07-23.oshdb.mv.db
-
           echo ::set-output name=build_version::${BUILD_VERSION}
           echo ::set-output name=buildx_args_version::--platform ${DOCKER_PLATFORMS} \
                       --build-arg OHSOMEAPI_VERSION=${DOCKER_VERSION} \
-                      --build-arg FALLBACK_DATA_FILE=fallback.oshdb.mv.db \
                       ${TAGS_VERSION} .
           echo ::set-output name=buildx_args_latest::--platform ${DOCKER_PLATFORMS} \
                       --build-arg OHSOMEAPI_VERSION=latest \
-                      --build-arg FALLBACK_DATA_FILE=fallback.oshdb.mv.db \
                       ${TAGS_LATEST} .
       - name: Build version if not present
         if: ${{ steps.prepare.outputs.build_version == 'true' }}
