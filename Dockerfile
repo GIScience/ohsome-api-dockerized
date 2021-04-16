@@ -36,7 +36,7 @@ COPY entrypoint.sh /opt/
 
 # Bootstrap the app os and compress the folder afterwards to reduce the image size.
 RUN echo Prepare the app folder. \
-    && apk add maven xz pv \
+    && apk add maven xz \
     && rm -rf /var/cache/apk/* \
     && echo Copy the correct *.jar file to the app folder. \
     && mv /opt/app/target/*.jar /opt/app/ohsome-api.jar \
