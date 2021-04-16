@@ -20,7 +20,7 @@ RUN if [ -z $OHSOMEAPI_VERSION ] || [ "$OHSOMEAPI_VERSION" = "latest" ] ; then e
     && rm -rf fallback.tar.xz
 
 RUN echo Run the integration tests \
-    && mvn -Dport_get=8081 -Dport_post=8082 -Dport_data=8083 -Dport_xyz=8084 -DdbFilePathProperty="--database.db=./fallback.oshdb.mv.db" test
+    && mvn -Dport_get=8081 -Dport_post=8082 -Dport_data=8083 -DdbFilePathProperty="--database.db=./fallback.oshdb.mv.db" test
 
 # Make it executable
 RUN mvn -DskipTests=true package
