@@ -16,16 +16,28 @@ elif ! [ -d "./app" ] && ! [ -f "./app.tar.xz" ]; then
   exit
 fi
 
+if ! [ -f "./fallback.oshdb.mv.db" ] && [ -f "./fallback.tar.xz" ]; then
+  echo "===================================================="
+  echo "Fallback data still compressed. Decompressing it first."
+  echo "===================================================="
+  tar -xvf fallback.tar.xz
+  rm -rf fallback.tar.xz
+else
+  echo "=================================================================================="
+  echo "No fallback data found. Skipping fallback setup"
+  echo "=================================================================================="
+fi
+
 if [ -f "./data/${DATA_FILE}" ]; then
   echo "=================================================================="
   echo "Custom database found. Using it instead of the fallback database."
   echo "=================================================================="
   java -jar app/ohsome-api.jar --database.db="./data/${DATA_FILE}"
-elif [ -e "./app/fallback.oshdb.mv.db" ]; then
+elif [ -e "./fallback.oshdb.mv.db" ]; then
   echo "============================================================"
   echo "No custom database found. Falling back to fallback database."
   echo "============================================================"
-  java -jar app/ohsome-api.jar --database.db=./app/fallback.oshdb.mv.db
+  java -jar app/ohsome-api.jar --database.db=./fallback.oshdb.mv.db
 else
   echo "========================================================================"
   echo "No custom database found and no fallback database initialized. Quitting."

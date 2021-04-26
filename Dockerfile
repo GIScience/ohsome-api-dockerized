@@ -32,7 +32,7 @@ WORKDIR /opt/
 COPY --from=build-stage /opt/app/target/*.jar /opt/app/target/
 
 # Copy the fallback data and entrypoint
-COPY entrypoint.sh /opt/
+COPY entrypoint.sh fallback_data/fallback.tar.xz /opt/
 
 # Bootstrap the app os and compress the folder afterwards to reduce the image size.
 RUN echo Prepare the app folder. \
