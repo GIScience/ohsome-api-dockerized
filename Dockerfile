@@ -19,11 +19,8 @@ RUN echo Extract the test data. \
     && tar -xf fallback.tar.xz \
     && rm -rf fallback.tar.xz
 
-RUN echo Run the integration tests \
-    && mvn -Dport_get=8081 -Dport_post=8082 -Dport_data=8083 -DdbFilePathProperty="--database.db=./fallback.oshdb.mv.db" verify
-
-# Make it executable
-RUN mvn -DskipTests=true package
+RUN echo Build and run the integration tests \
+    && mvn -DskipTests=false -Dport_get=8081 -Dport_post=8082 -Dport_data=8083 -DdbFilePathProperty="--database.db=./fallback.oshdb.mv.db" package
 
 
 # 2. Preparation stage
