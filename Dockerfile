@@ -8,7 +8,9 @@ ARG OHSOMEAPI_VERSION
 WORKDIR /opt/app/
 
 # System deps and get the ohsome-api repository data:
-RUN apk add git bash maven && git clone https://github.com/GIScience/ohsome-api.git ./ && git fetch --all --tags
+RUN apk add git bash maven \
+     && if [ -z $OHSOMEAPI_VERSION ] || [ "$OHSOMEAPI_VERSION" = "latest" ] ; then echo Version not provided. Sticking to latest version. && export BRANCH_PARAMETER=""; else echo Version provided. Checkout $OHSOMEAPI_VERSION && export BRANCH_PARAMETER="-b $OHSOMEAPI_VERSION"; fi  \
+    && git clone https://github.com/GIScience/ohsome-api.git $BRANCH_PARAMETER --depth 1 .
 
 COPY fallback_data/fallback.tar.xz /opt/app/
 
