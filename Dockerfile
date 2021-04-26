@@ -15,7 +15,6 @@ RUN apk add git bash maven \
 COPY fallback_data/fallback.tar.xz /opt/app/
 
 # Checkout version if provided
-RUN if [ -z $OHSOMEAPI_VERSION ] || [ "$OHSOMEAPI_VERSION" = "latest" ] ; then echo Version not provided. Sticking to latest version.; else echo Version provided. Checkout $OHSOMEAPI_VERSION \
     && git checkout --quiet tags/$OHSOMEAPI_VERSION ; fi \
     && echo Extract the test data. \
     && tar -xf fallback.tar.xz \
