@@ -15,8 +15,7 @@ RUN apk add git bash maven \
 COPY fallback_data/fallback.tar.xz /opt/app/
 
 # Checkout version if provided
-    && git checkout --quiet tags/$OHSOMEAPI_VERSION ; fi \
-    && echo Extract the test data. \
+RUN echo Extract the test data. \
     && tar -xf fallback.tar.xz \
     && rm -rf fallback.tar.xz
 
