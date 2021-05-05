@@ -83,8 +83,6 @@ jobs:
         if: ${{ steps.prepare.outputs.build_version == 'true' }}
         run: |
           docker buildx build --output "type=image,push=false" ${{ steps.prepare.outputs.buildx_args_version }}
-      - name: Build latest
-        run: |
           docker buildx build --output "type=image,push=false" ${{ steps.prepare.outputs.buildx_args_latest }}
       - name: Build nightly
         run: |
@@ -95,13 +93,10 @@ jobs:
         with:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_TOKEN }}
-      - name: Publish version if not present
+      - name: Publish version and latest if not present
         if: ${{ steps.prepare.outputs.build_version == 'true' }}
         run: |
           docker buildx build --output "type=image,push=true" ${{ steps.prepare.outputs.buildx_args_version }}
-          docker buildx build --output "type=image,push=true" ${{ steps.prepare.outputs.buildx_args_latest }}
-      - name: Publish latest
-        run: |
           docker buildx build --output "type=image,push=true" ${{ steps.prepare.outputs.buildx_args_latest }}
       - name: Publish nightly
         run: |
