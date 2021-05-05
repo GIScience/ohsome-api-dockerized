@@ -49,7 +49,7 @@ jobs:
           TAGS_NIGHTLY="--tag ${DOCKER_IMAGE}:nightly"
 
           echo ::set-output name=buildx_args_nightly::--platform ${DOCKER_PLATFORMS} \
-                      --build-arg OHSOMEAPI_VERSION=nightly \
+                      --build-arg OHSOMEAPI_VERSION=latest \
                       ${TAGS_NIGHTLY} .
       - name: Build nightly
         run: |
