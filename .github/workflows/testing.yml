@@ -46,11 +46,11 @@ jobs:
           DOCKER_IMAGE=dockertest/ohsome-api
           DOCKER_PLATFORMS=linux/amd64
 
-          TAGS_LATEST="--tag ${DOCKER_IMAGE}:latest"
+          TAGS_NIGHTLY="--tag ${DOCKER_IMAGE}:latest"
 
           echo ::set-output name=buildx_args_latest::--platform ${DOCKER_PLATFORMS} \
                       --build-arg OHSOMEAPI_VERSION=latest \
-                      ${TAGS_LATEST} .
-      - name: Build latest
+                      ${TAGS_NIGHTLY} .
+      - name: Build nightly
         run: |
           docker buildx build --output "type=image,push=false" ${{ steps.prepare.outputs.buildx_args_latest }}

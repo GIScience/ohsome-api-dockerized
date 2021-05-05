@@ -59,6 +59,7 @@ jobs:
 
           TAGS_VERSION="--tag ${DOCKER_IMAGE}:${DOCKER_VERSION}"
           TAGS_LATEST="--tag ${DOCKER_IMAGE}:latest"
+          TAGS_NIGHTLY="--tag ${DOCKER_IMAGE}:nightly"
 
           if [[ $CURRENT_VERSIONS =~ $DOCKER_VERSION ]]; then
             echo "Version: $DOCKER_VERSION present or latest. Skipping it!"
@@ -73,15 +74,19 @@ jobs:
                       --build-arg OHSOMEAPI_VERSION=${DOCKER_VERSION} \
                       ${TAGS_VERSION} .
           echo ::set-output name=buildx_args_latest::--platform ${DOCKER_PLATFORMS} \
-                      --build-arg OHSOMEAPI_VERSION=latest \
+                      --build-arg OHSOMEAPI_VERSION=${DOCKER_VERSION} \
                       ${TAGS_LATEST} .
+          echo ::set-output name=buildx_args_nightly::--platform ${DOCKER_PLATFORMS} \
+                      --build-arg OHSOMEAPI_VERSION=nightly \
+                      ${TAGS_NIGHTLY} .
       - name: Build version if not present
         if: ${{ steps.prepare.outputs.build_version == 'true' }}
         run: |
           docker buildx build --output "type=image,push=false" ${{ steps.prepare.outputs.buildx_args_version }}
+          docker buildx build --output "type=image,push=false" ${{ steps.prepare.outputs.buildx_args_latest }}
       - name: Build latest
         run: |
-          docker buildx build --output "type=image,push=false" ${{ steps.prepare.outputs.buildx_args_latest }}
+          docker buildx build --output "type=image,push=false" ${{ steps.prepare.outputs.buildx_args_nightly }}
       - name: Login to DockerHub
         if: success()
         uses: docker/login-action@v1
@@ -92,6 +97,7 @@ jobs:
         if: ${{ steps.prepare.outputs.build_version == 'true' }}
         run: |
           docker buildx build --output "type=image,push=true" ${{ steps.prepare.outputs.buildx_args_version }}
-      - name: Publish latest
-        run: |
           docker buildx build --output "type=image,push=true" ${{ steps.prepare.outputs.buildx_args_latest }}
+      - name: Publish nightly
+        run: |
+          docker buildx build --output "type=image,push=true" ${{ steps.prepare.outputs.buildx_args_nightly }}
