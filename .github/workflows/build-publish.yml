@@ -77,14 +77,14 @@ jobs:
                       --build-arg OHSOMEAPI_VERSION=${DOCKER_VERSION} \
                       ${TAGS_LATEST} .
           echo ::set-output name=buildx_args_nightly::--platform ${DOCKER_PLATFORMS} \
-                      --build-arg OHSOMEAPI_VERSION=nightly \
+                      --build-arg OHSOMEAPI_VERSION=latest \
                       ${TAGS_NIGHTLY} .
       - name: Build version if not present
         if: ${{ steps.prepare.outputs.build_version == 'true' }}
         run: |
           docker buildx build --output "type=image,push=false" ${{ steps.prepare.outputs.buildx_args_version }}
           docker buildx build --output "type=image,push=false" ${{ steps.prepare.outputs.buildx_args_latest }}
-      - name: Build latest
+      - name: Build nightly
         run: |
           docker buildx build --output "type=image,push=false" ${{ steps.prepare.outputs.buildx_args_nightly }}
       - name: Login to DockerHub
@@ -93,7 +93,7 @@ jobs:
         with:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_TOKEN }}
-      - name: Publish version if not present
+      - name: Publish version and latest if not present
         if: ${{ steps.prepare.outputs.build_version == 'true' }}
         run: |
           docker buildx build --output "type=image,push=true" ${{ steps.prepare.outputs.buildx_args_version }}
