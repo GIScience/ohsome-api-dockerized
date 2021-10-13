@@ -1,5 +1,7 @@
 # ohsome-api-dockerized
 
+[![status: experimental](https://github.com/GIScience/badges/raw/master/status/experimental.svg)](https://github.com/GIScience/badges#experimental)
+
 Dockerized Version of the ohsome-api. The current code of the `ohsome-api` can be found
 at: [https://github.com/GIScience/ohsome-api](https://github.com/GIScience/ohsome-api). To see all available docker
 images visit: [julianpsotta/ohsome-api](https://hub.docker.com/repository/docker/julianpsotta/ohsome-api)
